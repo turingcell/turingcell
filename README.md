@@ -10,7 +10,7 @@ Note: The English version of this article will come out soon. Please wait with p
 
 本文属于开源项目[TuringCell](https://turingcell.org)。本文重点介绍了Turing Cell计算模型的原理与简单证明，及其对应实现——TuringCell计算机的核心设计思想。
 
-Turing Cell Model是一个运行于分布式一致性算法(如Paxos/Raft)之上的计算机模型，TuringCell是一个Turing Cell Model的开源实现，这意味着您可以毫不费力地为已有的软件增加高可用、容错、强一致等等分布式系统的特性。同时，TuringCell是一个商业友好的开源项目，它的核心力量源泉是一个开放包容的开源社区，不管您来自哪里，说什么语言，都可以加入进来一起平等自由地讨论、构建TuringCell！
+Turing Cell Model是一个运行于分布式一致性算法(如Paxos/Raft)之上的计算机模型，TuringCell计算机是一个Turing Cell Model的开源实现，借助TuringCell，您可以毫不费力地为已有的软件增加高可用、容错、强一致等等分布式系统的特性。同时，TuringCell是一个商业友好的开源项目，它的核心力量源泉是一个开放包容的开源社区，不管您来自哪里，说什么语言，都可以加入进来一起平等自由地讨论、构建TuringCell！
 
 作者：Sen Han (韩森) 00hnes@gmail.com
 
@@ -43,9 +43,9 @@ TuringCell计算机与普通的计算机之间没有太大的区别——除了�
 
 所以，您可以在一个TuringCell计算机之上运行任何操作系统及其对应的应用程序，只要这个操作系统支持此TuringCell计算机具体实现的指令集架构（ISA）与核心的I/O设备。除了可以运行需要MMU支持的Linux操作系统之外，您还可以在TuringCell计算机之上运行不需要MMU支持的嵌入式实时操作系统（RTOS）。另外，如果您十分关注此分布式应用的性能，您甚至还可以选择以BareMetal的形式运行完全由您自己定制的系统。
 
-什么是Cell？
+什么是“Cell”？
 
-一般的生物细胞组织在受到一定程度的非致命性伤害后，能够进行损伤的自我恢复，同时此细胞组织能保证其在整体系统中的功能处于一定程度的正常状态，而TuringCell计算机也具有一定程度与之类似的特性。
+细胞是生物组织的基本元素之一。一般的生物组织在受到一定程度的非致命性伤害后，能够进行损伤的自我恢复，这在生物学上被称为“再生”。在组织再生的同时，组织能保证其在整体系统中的功能处于一定程度的正常状态。而TuringCell计算机的最初设计意图之一就是要拥有一定程度地与之类似的生物再生特性。
 
 ## 1 Turing Cell模型的细节与证明
 
