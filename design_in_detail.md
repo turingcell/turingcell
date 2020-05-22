@@ -34,10 +34,10 @@ mdf(proposer_ts,mono_global_sequence_number)
 
 ```
 cpu ram io_device_registers
-io_device{ 
-    private_ram,
+
+io_device 
+    private_ram
     private_durable_storage
-}
 
 pre_cpu_exec_phase
     io_device_pre_cpu_exec_phase_handler
@@ -65,4 +65,10 @@ post_cpu_exec_phase
         disl
         interrupt_controller
         ...
+
+mdf
+    pre_cpu_exec_phase
+    cpu_exec_phase
+    post_cpu_exec_phase
+
 ```
