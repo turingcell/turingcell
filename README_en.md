@@ -6,7 +6,10 @@ This article belongs to the open source project [turingcell](https://turingcell.
 
 Turing Cell Model is a computer model which runs over distributed consensus algorithm (like Paxos/Raft). TuringCell computer is an open source implementation of the Turing Cell Model. With TuringCell, you can easily add the characteristics of a Paxos/Raft group like high availability, high consensus, and fault tolerance to nearly any already existing software. At the meantime, TuringCell is a business friendly opensource project. Its core strength is from an open and inclusive opensource community. No matter where you come from and what language you speak, you can join in to develop and change the future of TuringCell equally and freely!
 
-作者：Sen Han (韩森) 00hnes@gmail.com
+Author: Sen Han <00hnes@gmail.com>
+
+[![中文文档](https://img.shields.io/badge/doc-en%20+%20中文-blue.svg?style=flat-square)](https://github.com/turingcell/turingcell/blob/master/README_zh.md)
+[![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=TuringCell+-+Run+Linux+over+Paxos/Raft+-&url=https://github.com/turingcell/turingcell&via=00hnes)
 
 # Table of Content
 
@@ -187,21 +190,19 @@ Thank you very much for your [generous donation](https://github.com/turingcell/d
 
 ```
 v0.01 2017.5
-    Sen Han (韩森) <00hnes@gmail.com>
+    Sen Han <00hnes@gmail.com>
 
 v0.2  2017.12-2018.2 
-    Sen Han (韩森) <00hnes@gmail.com>
+    Sen Han <00hnes@gmail.com>
 
 v0.9   2020.5 
-    Sen Han (韩森) <00hnes@gmail.com>
+    Sen Han <00hnes@gmail.com>
 ```
 
 ## 6 Copyright and License
 
-Author: Sen Han (韩森) <00hnes@gmail.com>
+Author: Sen Han <00hnes@gmail.com>
 
 Website: https://turingcell.org/
 
 License: This article is licensed under the [Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/), except the picture of the [TuringCell Logo](https://github.com/turingcell/logo) which is under the [Creative Commons Attribution-NoDerivatives 4.0 International License](http://creativecommons.org/licenses/by-nd/4.0/).
-
-本文开头处的[TuringCell Logo](https://github.com/turingcell/logo)图片采用[知识共享署名-禁止演绎 4.0 国际许可协议](http://creativecommons.org/licenses/by-nd/4.0/)进行许可，文中除此logo之外的部分均采用[知识共享署名-相同方式共享 4.0 国际许可协议](https://creativecommons.org/licenses/by-sa/4.0/)进行许可。
