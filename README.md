@@ -109,7 +109,9 @@ TuringCell computer v0.1 is for the smallest prototype verification, and v1.0 ve
 ```
 x86 or x64
     Cost of Implementation: 
-        Large amount of engineering cost, simply all physical work. Because the decoder of CISC CPU is more complicated, the interpretation performance of CISC-CPU will have certain disadvantages compared to RISC-CPU
+        Large amount of engineering cost, simply all physical work. Because the decoder of CISC CPU is more 
+        complicated, the interpretation performance of CISC-CPU will have certain disadvantages compared to 
+        RISC-CPU
     Ecological prosperity of compiler toolchain: 
         Excellent
     Maintainability: 
@@ -123,38 +125,41 @@ ARM
         Good
 MIPS
     Cost of Implementation: 
-        RSIC has rather low implementation cost, simple decoding, and instructions are more concise than CISC; MIPS is even simpler than ARM
+        RSIC has rather low implementation cost, simple decoding, and instructions are more concise than CISC; 
+        MIPS is even simpler than ARM
     Ecological prosperity of compiler toolchain: 
         Not so good compared to ARM
     Maintainability:
         Good
 
-Hardware digital circuits like AISC/FPGA is very good at CISC instruction decoding because they are just simple parallelable combinatorial logic circuits whereas the common instruction-executing-serially CPU is not. In contrast with CISC, RISC decoding is much simpler and straightforward, thus the performance penalty would be much less.
+Hardware digital circuits like AISC/FPGA is very good at CISC instruction decoding because they are just simple 
+parallelable combinatorial logic circuits whereas the common instruction-executing-serially CPU is not so good 
+at this kind of task. In contrast with CISC, RISC instructions decoding is much simpler and straightforward, 
+thus the performance penalty of instruction decoding would be much smaller.
 
-So, it is finally decided that the v0.1 version would choose to emulate the ARMv4 architecture and further the ARMv5 architecture in the 1st stable release version, i.e. v1.0.
+So, it is finally decided that the v0.1 version would choose to emulate the ARMv4 architecture and further the 
+ARMv5 architecture in the 1st stable release version, i.e. v1.0.
 ```
 
 In addition, the TuringCell computer also supports addons for extending other kinds of CPU implementations.
 
 ### 2.2 Core I/O Devices
 
-timer: It is essential. For example, it is used to implement time sharing and preemption between multiple tasks in the operating system.
+Timer: It is essential. For example, it is often necessary when we want to implement time sharing and preemption between multi-tasks in the operating system.
 
 UART: It is probably the simplest general-purpose I/O device that can interact with the outside world. For example, it can be used as a console, or simply as a general data link for communication with other external systems.
 
-Disk: persistent storage block devices.
+Disk: A very common persistent storage block devices.
 
-Interrupt controller: Listens for the event status of all I/O devices, and notifies the CPU of the information interested by the CPU in the form of events, which provides the CPU with another option besides polling the status register of I/O devices.
-
-In addition, the TuringCell computer also supports addons for extending other types of CPU implementations.
+Interrupt controller: Listens for the event status of all I/O devices, and notifies the CPU of the information interested by the CPU in the form of *events*, which provides the CPU with another option besides polling the status register of I/O devices.
 
 In addition, the TuringCell computer also supports addons for extending other kinds of I/O devices implementations.
 
 ### 2.3 Distributed Infinitely-Long Instruction Tape
 
-As the prototype verification version, V0.1 chooses to use etcd underneath the RSM temporarily.
+As the prototype verification version, V0.1 chooses to use the [etcd](https://github.com/etcd-io/etcd) underneath the RSM temporarily.
 
-As the first stable release version, v1.0 is implemented with a Paxos group which developed by the TuringCell community itself, including but not limited to the following features:
+As the first stable release version, v1.0 will be implemented with a TuringCell Paxos group which developed by the TuringCell community itself, including but not limited to the following features:
 
 1. Egalitarianism
 2. Multi-Master
@@ -163,7 +168,7 @@ As the first stable release version, v1.0 is implemented with a Paxos group whic
 5. Membership changement
 6. Single-RTT chosen for ordinary operations
 7. Optimizations for the complex WAN environment 
-8. Service can be a basic component in any other project, and the goal is to become one of the best choices in the industry's open source implementation of distributed consistency algorithm
+8. This service can be a basic component in any other project, and the goal is to become one of the best choices in the industry's open source implementations of distributed consensus algorithm
 9. Any other cool ideas is welcome
 
 ### 2.4 More Detailed Design
@@ -199,7 +204,7 @@ v0.9   2020.5
 
 ## 6 Copyright and License
 
-Author: Sen Han <00hnes@gmail.com>
+Author: Sen Han \<00hnes@gmail.com\>
 
 Website: https://turingcell.org/
 
