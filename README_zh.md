@@ -12,7 +12,7 @@ Note: For the English version of this article please refer to this [link](https:
 
 Turing Cell Model是一个运行于分布式一致性算法(如Paxos/Raft)之上的计算机模型，TuringCell计算机是一个Turing Cell Model的开源实现，借助TuringCell，您可以毫不费力地为已有的软件增加高可用、容错、强一致等等分布式系统的特性。同时，TuringCell是一个商业友好的开源项目，它的核心力量源泉是一个开放包容的开源社区，不管您来自哪里，说什么语言，都可以加入进来一起平等自由地讨论、构建TuringCell！
 
-作者：Sen Han (韩森) 00hnes@gmail.com
+作者：Sen Han (韩森) \<00hnes@gmail.com\>
 
 # Table of Content
 

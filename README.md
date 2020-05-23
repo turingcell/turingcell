@@ -6,7 +6,7 @@ This article belongs to the open source project [TuringCell](https://turingcell.
 
 Turing Cell Model is a computer model which runs over distributed consensus algorithm (like Paxos/Raft). TuringCell computer is an open source implementation of the Turing Cell Model. With TuringCell, you can easily add the characteristics of a Paxos/Raft group like high availability, consensus, and fault tolerance to nearly any already existing software. At the meantime, TuringCell is a business friendly opensource project. Its core strength is from an open and inclusive opensource community. No matter where you come from and what language you speak, you can join in to develop and change the future of TuringCell equally and freely!
 
-Author: Sen Han <00hnes@gmail.com>
+Author: Sen Han \<00hnes@gmail.com\>
 
 [![中文文档](https://img.shields.io/badge/doc-en%20+%20中文-blue.svg?style=flat-square)](https://github.com/turingcell/turingcell/blob/master/README_zh.md)
 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=TuringCell+-+Run+Linux+over+Paxos/Raft+-&url=https://github.com/turingcell/turingcell&via=00hnes)
