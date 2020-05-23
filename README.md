@@ -1,77 +1,74 @@
 # TuringCell: Run Linux over Paxos/Raft
 
-# TuringCell：在Paxos/Raft算法之上运行Linux操作系统
-
-Note: The English version of this article will come out soon. Please wait with patience.
-
-----
-
 ![TuringCell Logo](img/logo_small_icon.png)
 
-本文属于开源项目[TuringCell](https://turingcell.org)。本文重点介绍了Turing Cell计算模型的原理与简单证明，及其对应实现——TuringCell计算机的核心设计思想。
+This article belongs to the open source project [turingcell](https://turingcell.org). This article focuses on the principle, a simple proof of Turing Cell computing model, and its corresponding implementation -- the core design of TuringCell computer.
 
-Turing Cell Model是一个运行于分布式一致性算法(如Paxos/Raft)之上的计算机模型，TuringCell计算机是一个Turing Cell Model的开源实现，借助TuringCell，您可以毫不费力地为已有的软件增加高可用、容错、强一致等等分布式系统的特性。同时，TuringCell是一个商业友好的开源项目，它的核心力量源泉是一个开放包容的开源社区，不管您来自哪里，说什么语言，都可以加入进来一起平等自由地讨论、构建TuringCell！
+Turing Cell Model is a computer model which runs over distributed consensus algorithm (like Paxos/Raft). TuringCell computer is an open source implementation of the Turing Cell Model. With TuringCell, you can easily add the characteristics of a Paxos/Raft group like high availability, high consensus, and fault tolerance to nearly any already existing software. At the meantime, TuringCell is a business friendly opensource project. Its core strength is from an open and inclusive opensource community. No matter where you come from and what language you speak, you can join in to develop and change the future of TuringCell equally and freely!
 
-作者：Sen Han (韩森) 00hnes@gmail.com
+Author: Sen Han <00hnes@gmail.com>
+
+[![中文文档](https://img.shields.io/badge/doc-en%20+%20中文-blue.svg?style=flat-square)](https://github.com/turingcell/turingcell/blob/master/README_zh.md)
+[![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=TuringCell+-+Run+Linux+over+Paxos/Raft+-&url=https://github.com/turingcell/turingcell&via=00hnes)
 
 # Table of Content
 
-   * [0 什么是TuringCell](#0-什么是TuringCell)
-   * [1 Turing Cell模型的细节与证明](#1-Turing-Cell模型的细节与证明)
-      * [1.1 复制状态机运行模型](#11-复制状态机运行模型)
-      * [1.2 普通计算机运行模型](#12-普通计算机运行模型)
-      * [1.3 TuringCell定理](#13-TuringCell定理)
-   * [2 TuringCell计算机的设计与实现](#2-TuringCell计算机的设计与实现)
-      * [2.1 CPU选型](#21-CPU选型)
-      * [2.2 核心I/O设备](#22-核心io设备)
-      * [2.3 分布式无限长纸带](#23-分布式无限长纸带)
-      * [2.4 更详细的设计](#24-更详细的设计)
-   * [3 社区、支持与合作](#3-社区支持与合作)
-   * [4 捐赠](#4-捐赠)
-   * [5 更新历史](#5-更新历史)
+   * [0 What is Turing Cell?](#0-what-is-turing-cell)
+   * [1 Details and Proof of Turing Cell Model](#1-details-and-proof-of-turing-cell-model)
+      * [1.1 Replicated State Machine Model](#11-replicated-state-machine-model)
+      * [1.2 Common Computer Running Model](#12-common-computer-running-model)
+      * [1.3 TuringCell Theorem](#13-turingcell-theorem)
+   * [2 The Design and Implementation of TuringCell Computer](#2-the-design-and-implementation-of-turingcell-computer)
+      * [2.1 Choice of CPU](#21-choice-of-cpu)
+      * [2.2 Core I/O Devices](#22-core-io-devices)
+      * [2.3 Distributed Infinitely-Long Instruction Tape](#23-distributed-infinitely-long-instruction-tape)
+      * [2.4 More Detailed Design](#24-more-detailed-design)
+   * [3 Community, Support and Cooperation](#3-community-support-and-cooperation)
+   * [4 Donate](#4-donate)
+   * [5 History of Versions](#5-history-of-versions)
    * [6 Copyright and License](#6-copyright-and-license)
 
-## 0 什么是TuringCell
-
-**Turing Cell = Turing Machine + Paxos/Raft**
+## 0 What is Turing Cell?
 
 ![turingcell_computer_and_common_computer_arch](img/turingcell_computer_and_common_computer_arch.png)
 
-TuringCell计算机是Turing Cell计算模型的实现，就像普通的计算机是图灵机计算模型的实现一样。
+**Turing Machine + Paxos/Raft = Turing Cell**
 
-TuringCell计算机与普通的计算机之间没有太大的区别——除了前者是运行于Paxos/Raft等分布式一致性算法之上的以外。正是由于这一特点，使得TuringCell计算机天生拥有高可用、强一致、一定的容错能力等一个Paxos/Raft组所能拥有的一切特性，除了这些基本特性以外，它还可以拥有分布式系统的成员集合变更，Multi-Master（基于Paxos算法的情况下）等等一个Paxos/Raft组的具体实现特性。
+A Turing Cell computer is an implementation of Turing Cell model, which just like the common computer is the implementation of the Turing Machine model.
 
-所以，您可以在一个TuringCell计算机之上运行任何操作系统及其对应的应用程序，只要这个操作系统支持此TuringCell计算机具体实现的指令集架构（ISA）与核心的I/O设备。除了可以运行需要MMU支持的Linux操作系统之外，您还可以在TuringCell计算机之上运行不需要MMU支持的嵌入式实时操作系统（RTOS）。另外，如果您十分关注此分布式应用的性能，您甚至还可以选择以BareMetal的形式运行完全由您自己定制的系统。
+A Turing Cell computer has no big differences with a common computer except it runs over a Paxos/Raft group and thus it has all those natural supports for high availabilty, fault tolerance, high consensus and any property that a Paxos/Raft group could has (others like membership changement, multi-master in Paxos and etc).
 
-什么是“Cell”？
+So, you can run any operating system and its corresponding userspace applications over a Turing Cell computer just as you could do on a common computer as long as this operating system supports the ISA and I/O devices of this certain Turing Cell computer implementation. In addition to the running of Linux which the OS needs MMU, you could also even choose to run a RTOS without MMU requirement or even the bare metal way if you really care about the performance of your distributed applications.
 
-细胞是生物组织的基本元素之一。一般的生物组织在受到一定程度的非致命性伤害后，能够进行损伤的自我恢复，这在生物学上被称为“再生”。在组织再生的同时，组织能保证其在整体系统中的功能处于一定程度的正常状态。而TuringCell计算机的最初设计意图之一就是要拥有一定程度地与之类似的生物再生特性。
+What is "Cell"?
 
-## 1 Turing Cell模型的细节与证明
+The cell is one of the fundamental elements of biological tissue. After receiving a certain degree of non-fatal injury, the general biological tissue can recover from the damage, which is called "regeneration" in biology. At the same time of regeneration, the tissue can ensure that its function in the overall system is in a certain degree of the normal state. One of the initial design intentions of the TuringCell computer is to have a certain degree of similar biological regeneration feature.
 
-### 1.1 复制状态机运行模型
+## 1 Details and Proof of Turing Cell Model
+
+### 1.1 Replicated State Machine Model
 
 ![tape_of_RSM](img/RSM.png)
 
-“复制状态机”模型(Replicated State Machines, abbr. RSM)：
+What is Replicated State Machine?
 
-&emsp;基于分布式一致性算法（比如通过将无穷多个Paxos运行实例顺序地组合在一起，相关更多的内容请阅读《[Paxos Made Easy](https://github.com/turingcell/paxos-made-easy)》），构建出一个强一致的、具有一定容错能力的、高可用的无限长分布式指令纸带，多个具有相同起始状态的状态机执行者从前到后依次地执行纸带上的指令，假如说每一条指令都是数学确定的，那么可以肯定的是，当所有状态机执行者在执行完纸带上相同位置的某一个相同指令时，所有状态机的内部状态都必然是相同的，这种运行模型被称为“复制状态机模型”。复制状态机的实质就是通过一个强一致的、具有一定容错能力的、高可用的无限长分布式指令纸带得到一个强一致的、具有一定容错能力的、高可用的分布式状态机。
+Replicated State Machines, abbr. RSM:
 
-定义数学确定函数𝘮𝘥𝑓 (Mathematical Deterministic Function):
+Based on the distributed consensus algorithm (for example, by combining infinite Paxos instances sequentially, for more information about this topic please refer 《[Paxos Made Easy](https://github.com/turingcell/paxos-made-easy)》), to build a consensus, high-available and fault-tolerant distributed infinitely-long instruction tape. Several state machine executors with the same initial state execute the instructions on the tape sequentially. If each instruction on the tape is mathematically deterministic, then it is certain that when all state machine executors finish the execution of a same instruction at the same position on the tape, the internal state of all state machines must be the same. This model is called the "replicated state machines model". The essence of the replication state machine is to obtain a consensus, high-available and fault-tolerant distributed state machine through a consensus, high-available and fault-tolerant, infinitely long distributed instruction tape.
 
-&emsp;**数学确定函数𝘮𝘥𝑓**&emsp;**在任何情况之下，只要给mdf函数一个确定的输入状态S1，那么就必然能够唯一地、确定地映射到一个确定的输出状态S2，即**
+Definition of the mathematical deterministic function 𝘮𝘥𝑓:
+
+&emsp;**Mathematical deterministic function 𝘮𝘥𝑓**&emsp;**In any case, as long as the mdf function is given a certain input state S1, then it must be able to uniquely and definitely map to a certain output state S2**
 
 &emsp;&emsp;**S2 = mdf(S1)**
 
-如此，我们可以得到“mdf”函数版的RSM定义
+In this way, we can get the mdf-version definition of the RSM
 
-&emsp;多个具有相同起始状态的状态机执行者从前到后依次地执行此分布式指令纸带上的指令——即mdf函数，由于mdf函数的特性，那么可以肯定的是，当所有状态机执行者在执行完纸带上相同位置的某一个特定𝘮𝘥𝑓函数时，所有状态机的内部状态都必然是相同的，这种运行模型我们称之为”复制状态机“模型
-
-如下图所示
+&emsp;Multiple state machine executors with the same initial state execute the instructions on the distributed instruction tape sequentially. **The instruction on the tape is a kind of mdf function**. Due to the characteristics of the mdf function, then it is certain that when all state machine executors finished the executing of the same 𝘮𝘥𝑓 function at the same position on the tape, the internal states of all these state machines are necessarily the same. This model is called the "replicated state machine" model.
 
 ![mdf-RSM-diagram](img/mdf-RSM-diagram.png)
 
-### 1.2 普通计算机运行模型
+### 1.2 Common Computer Running Model
 
 ![state_registers_of_common_computer](img/state_registers_of_common_computer.png)
 
@@ -79,124 +76,133 @@ TuringCell计算机与普通的计算机之间没有太大的区别——除了�
 state{cpu regsters' state, memory state, i/o devices' state}
 ```
 
-从某种意义上讲，计算机的运行可以看成是一个连续的状态迁移序列。
+In a sense, the running of the common computer can be viewed as a continuous sequence of the state transition.
 
-为了简化模型，我们下面将讨论只拥有单周期指令的计算机，当然这些结论可以很容易地推广到更一般的计算机运行模型中去。
+To simplify the model, we will only discuss the computer has single-cycle-instruction architecture below. Of course, these conclusions can be easily extended to more general computers.
 
-&emsp;假设将运行中的计算机在t1时钟周期开始时的状态记为S1，t2时钟周期开始时的状态记为S2，已知t2>t1，那么必然会存在一种状态映射的函数f，使得
+&emsp;Suppose that the state of the running computer at the beginning of the clock cycle t1 is denoted as S1, and the state of the beginning of the clock cycle t2 is denoted as S2. It is known that t2 > t1, then there must exist a function f of state mapping, which satisfies
 
 &emsp;**S2 = f(S1)**
 
-&emsp;那么我们可以把计算机的运行看成是一个又一个这样的f函数（即当前时钟周期要执行的CPU指令所等价的f函数）的依次执行。
-
-如下图所示
+&emsp;Then we can regard the running of the computer as the sequential execution of one after another such f-functions (that is, the f-function is equivalent to the CPU instruction to execute in the current clock cycle).
 
 ![f-common-computer-diagram](img/f-common-computer-diagram.png)
 
-### 1.3 TuringCell定理
+### 1.3 TuringCell Theorem
 
-综上，我们可以得到
+In summary, we could get
 
-&emsp;**TuringCell定理**&emsp;**对于一个普通计算机运行模型𝒞，其𝑓函数为𝑓n，其中n为任意非负整数，假如存在一个复制状态机运行模型ℛ，其𝘮𝘥𝑓函数为𝘮𝘥𝑓n，其中n为任意非负整数，若有对于任意的n，𝑓n与𝘮𝘥𝑓n均是等价的条件成立，那么我们可以称𝒞与ℛ是状态迁移等价的**
+&emsp;**TuringCell Theorem**&emsp;**For an running common computer 𝒞, its 𝑓 function is 𝑓n, where n is any non-negative integer. There also exists a replicated state machine running model ℛ, and its 𝘮𝘥𝑓 function is 𝘮𝘥𝑓n, where n is any non-negative integer. If the proposition "𝑓n and 𝘮𝘥𝑓n are all equivalent" is true, then we could call 𝒞 and ℛ is equivalent from the perspective of state transition.**
 
-对于一般的计算机而言，所有的CPU指令都可以看成是一种mdf函数，唯一向系统的状态中引入“随机”成分的是I/O设备--其根本原因在于I/O的本质是系统与自然界的交互。为了将所有的I/O设备给mdf函数化，此处可以将所有能产生“随机”数据的部分移出RSM复制状态机--即通过向RSM复制状态机的指令执行中引入I/O机制使得其能够与外界进行数据交互来实现对I/O设备的mdf函数化，那么，综上可得，对于一般的计算机模型而言 
+For a common computer, all CPU instructions can be regarded as a mdf function. The only thing that introduces "random" into the state of the system is the I/O device -- the fundamental reason of that is the nature of I/O is the interaction between the system and the outside world. In order to mdf-functionalize all these I/O devices, we can move all the parts that could generate "random" data out of the RSM itself -- that is, by introducing the I/O mechanism via the definition of special I/O instructions in the RSM, thus the RSM can interact with the outside world from the perspective of mdf function. 
 
-&emsp;**TuringCell定理中阐述的这种等价描述是存在并且可以被实现的**
+Then, we could get
 
-## 2 TuringCell计算机的设计与实现
+&emsp;**The equivalence of state transition between 𝒞 and ℛ stated in TuringCell theorem do exist and could also be implemented**
+
+## 2 The Design and Implementation of TuringCell Computer
 
 ![TuringCell-Computer-Architecture-v0.1-and-v1.0](img/TuringCell-Computer-Architecture-v0.1-and-v1.0.png)
 
-TuringCell计算机v0.1为最小原型验证，v1.0版本为正式版本，可用于生产环境。
+TuringCell computer v0.1 is for the smallest prototype verification, and v1.0 version is the 1st stable version which could be used in the production environment.
 
-### 2.1 CPU选型
+### 2.1 Choice of CPU
 
 ```
 x86 or x64
-    工程量大 单纯的体力活 由于CISC-CPU的解码器更复杂 所以CISC-CPU的解释性能相比RISC-CPU会有一定的劣势
-    工具链生态繁荣度: 优秀
-    可维护性: 差
-arm
-    实现难度: RSIC 实现难度低 解码简单 指令相比CISC更简洁
-    工具链生态繁荣度: 良 开发活跃
-    可维护性: 优
-mips
-    实现难度: RSIC 实现难度低 解码简单 指令相比ARM更简洁
-    工具链生态繁荣度: 不太乐观 gcc上mips的提交频率相比arm低太多了
-    可维护性: 优
+    Cost of Implementation: 
+        Large amount of engineering cost, simply all physical work. Because the decoder of CISC CPU is more complicated, the interpretation performance of CISC-CPU will have certain disadvantages compared to RISC-CPU
+    Ecological prosperity of compiler toolchain: 
+        Excellent
+    Maintainability: 
+        Poor
+ARM
+    Cost of Implementation: 
+        RSIC has rather low implementation cost, simple decoding, and instructions are more concise than CISC
+    Ecological prosperity of compiler toolchain: 
+        Good
+    Maintainability: 
+        Good
+MIPS
+    Cost of Implementation: 
+        RSIC has rather low implementation cost, simple decoding, and instructions are more concise than CISC; MIPS is even simpler than ARM
+    Ecological prosperity of compiler toolchain: 
+        Not so good compared to ARM
+    Maintainability:
+        Good
 
-CISC指令译码多路并行mutiplexer实现对于FPGA/AISC等硬件电路来说是拿手好戏，但对串行的CPU核心来说就不那么性能亲和了，相比之下RISC的译码就简单直接很多了。
+Hardware digital circuits like AISC/FPGA is very good at CISC instruction decoding because they are just simple parallelable combinatorial logic circuits whereas the common instruction-executing-serially CPU is not. In contrast with CISC, RISC decoding is much simpler and straightforward, thus the performance penalty would be much less.
 
---> 最终决定v0.1版本选择模拟ARMv4架构，于v1.0正式发布版本加入ARMv5架构
+So, it is finally decided that the v0.1 version would choose to emulate the ARMv4 architecture and further the ARMv5 architecture in the 1st stable release version, i.e. v1.0.
 ```
 
-除此以外，TuringCell计算机支持用来扩展其它种类CPU实现的插件。
+In addition, the TuringCell computer also supports addons for extending other kinds of CPU implementations.
 
-### 2.2 核心I/O设备
+### 2.2 Core I/O Devices
 
-timer：至关重要，比如用于实现操作系统中多任务之间的分时抢占。
+timer: It is essential. For example, it is used to implement time sharing and preemption between multiple tasks in the operating system.
 
-UART：可能是最简单的能够与外界进行信息交互的通用I/O设备了，比如可以用于Console控制台，或者单纯地作为与外部的其他系统进行通讯的数据链路。
+UART: It is probably the simplest general-purpose I/O device that can interact with the outside world. For example, it can be used as a console, or simply as a general data link for communication with other external systems.
 
-Disk：持久存储块设备。
+Disk: persistent storage block devices.
 
-interrupt controller：监听所有I/O设备的事件状态，并将其中CPU所关心的信息以事件的形式通知到CPU，即给CPU提供了除对I/O设备的状态寄存器进行轮询之外的另一个选项。
+Interrupt controller: Listens for the event status of all I/O devices, and notifies the CPU of the information interested by the CPU in the form of events, which provides the CPU with another option besides polling the status register of I/O devices.
 
-除此以外，TuringCell计算机支持用来扩展其它种类I/O设备实现的插件。
+In addition, the TuringCell computer also supports addons for extending other types of CPU implementations.
 
-### 2.3 分布式无限长纸带
+In addition, the TuringCell computer also supports addons for extending other kinds of I/O devices implementations.
 
-v0.1版本作为原型验证版本先临时使用用etcd。
+### 2.3 Distributed Infinitely-Long Instruction Tape
 
-v1.0版本作为第一个正式稳定的发布版本使用TuringCell社区自己开发的、基于Paxos算法的专门分布式无限长纸带实现，包含但不限于以下特性：
+As the prototype verification version, V0.1 chooses to use etcd underneath the RSM temporarily.
 
-1. 平等主义
-2. 多Master
-3. 乱序并发提交
-4. 基于可变权重的Master动态选举与设置
-5. 成员集合变更
-6. 单RTT chosen
-7. 广域网环境优化
-8. 服务化，可以成为任何其它项目中的一个基础组件，目标是成为业界分布式一致性算法开源实现中的最优选择之一
-9. 其它任何很酷的idea 欢迎分享您的想法
+As the first stable release version, v1.0 is implemented with a Paxos group which developed by the TuringCell community itself, including but not limited to the following features:
 
-### 2.4 更详细的设计
+1. Egalitarianism
+2. Multi-Master
+3. Out-of-order and parallel chosen
+4. Dynamic election and with a variable election weight of each master 
+5. Membership changement
+6. Single-RTT chosen for ordinary operations
+7. Optimizations for the complex WAN environment 
+8. Service can be a basic component in any other project, and the goal is to become one of the best choices in the industry's open source implementation of distributed consistency algorithm
+9. Any other cool ideas is welcome
 
-关于实现更具体的设计请参见[此文档](https://github.com/turingcell/turingcell/blob/master/design_in_detail.md)。
+### 2.4 More Detailed Design
 
-## 3 社区、支持与合作
+For more detailed design of TuringCell computer please refer to [this document](https://github.com/turingcell/turingcell/blob/master/design_in_detail.md).
 
-欢迎您加入[TuringCell社区](https://github.com/turingcell/join-community)！
+## 3 Community, Support and Cooperation
 
-您的加入、支持与反馈对此开源项目至关重要！思想的交流，思维的碰撞，开放包容，平等自由，正是开源的迷人魅力之所在！成为TuringCell社区中的一员，让我们一起构建下一个激动人心的分布式开源项目！
+Welcome to join the [TuringCell community](https://github.com/turingcell/join-community)!
 
-您可以选择加入邮件列表、加入微信群、申请成为Github TuringCell组织成员、分享传播、提出疑问、Star/Watch/Follow、捐赠等等任何方式来支持此项目。
+Your participation, support and feedback are essential to this open source project! The exchange and collision of ideas, openness and inclusiveness, equality and freedom are always the charms of open source! Become a member of the TuringCell community, let us build the next exciting distributed opensource project together!
 
-此外，任何形式的合作，只要有益于此开源项目的良性发展，都是十分欢迎的，请您[联系](https://github.com/turingcell/contact)我。
+You can choose to join the mailing list, Wechat group, apply to be a member of TuringCell GitHub organization, share and spread, ask questions, star/watch/follow, donate, etc. to support this project.
 
-## 4 捐赠
+In addition, any form of cooperation is very welcome. Please [contact](https://github.com/turingcell/contact) me.
 
-十分感谢您的[慷慨捐赠](https://github.com/turingcell/donate)！
+## 4 Donate
 
-## 5 更新历史
+Thank you very much for your [generous donation](https://github.com/turingcell/donate)!
+
+## 5 History of Versions
 
 ```
 v0.01 2017.5
-    Sen Han (韩森) <00hnes@gmail.com>
+    Sen Han <00hnes@gmail.com>
 
 v0.2  2017.12-2018.2 
-    Sen Han (韩森) <00hnes@gmail.com>
+    Sen Han <00hnes@gmail.com>
 
 v0.9   2020.5 
-    Sen Han (韩森) <00hnes@gmail.com>
+    Sen Han <00hnes@gmail.com>
 ```
 
 ## 6 Copyright and License
 
-Author: Sen Han (韩森) <00hnes@gmail.com>
+Author: Sen Han <00hnes@gmail.com>
 
 Website: https://turingcell.org/
 
 License: This article is licensed under the [Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/), except the picture of the [TuringCell Logo](https://github.com/turingcell/logo) which is under the [Creative Commons Attribution-NoDerivatives 4.0 International License](http://creativecommons.org/licenses/by-nd/4.0/).
-
-本文开头处的[TuringCell Logo](https://github.com/turingcell/logo)图片采用[知识共享署名-禁止演绎 4.0 国际许可协议](http://creativecommons.org/licenses/by-nd/4.0/)进行许可，文中除此logo之外的部分均采用[知识共享署名-相同方式共享 4.0 国际许可协议](https://creativecommons.org/licenses/by-sa/4.0/)进行许可。
