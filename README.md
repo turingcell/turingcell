@@ -36,7 +36,7 @@ Author: Sen Han \<00hnes@gmail.com\>
 
 A Turing Cell computer is an implementation of Turing Cell model, which just like the common computer is the implementation of the Turing Machine model.
 
-A Turing Cell computer has no big differences with a common computer except it runs over a Paxos/Raft group and thus it has all those natural supports for high availabilty, fault tolerance, high consensus and any property that a Paxos/Raft group could has (others like membership changement, multi-master in Paxos and etc).
+A Turing Cell computer has no big differences with a common computer except it runs over a Paxos/Raft group and thus it has all those natural supports for high availabilty, fault tolerance, consensus and any property that a Paxos/Raft group could have (others like membership changement, multi-master in Paxos and etc).
 
 So, you can run any operating system and its corresponding userspace applications over a Turing Cell computer just as you could do on a common computer as long as this operating system supports the ISA and I/O devices of this certain Turing Cell computer implementation. In addition to the running of Linux which the OS needs MMU, you could also even choose to run a RTOS without MMU requirement or even the bare metal way if you really care about the performance of your distributed applications.
 
@@ -50,11 +50,9 @@ The cell is one of the fundamental elements of biological tissue. After receivin
 
 ![tape_of_RSM](img/RSM.png)
 
-What is Replicated State Machine?
+What is Replicated State Machine (RSM)?
 
-Replicated State Machines, abbr. RSM:
-
-Based on the distributed consensus algorithm (for example, by combining infinite Paxos instances sequentially, for more information about this topic please refer 《[Paxos Made Easy](https://github.com/turingcell/paxos-made-easy)》), to build a consensus, high-available and fault-tolerant distributed infinitely-long instruction tape. Several state machine executors with the same initial state execute the instructions on the tape sequentially. If each instruction on the tape is mathematically deterministic, then it is certain that when all state machine executors finish the execution of a same instruction at the same position on the tape, the internal state of all state machines must be the same. This model is called the "replicated state machines model". The essence of the replication state machine is to obtain a consensus, high-available and fault-tolerant distributed state machine through a consensus, high-available and fault-tolerant, infinitely long distributed instruction tape.
+&emsp;Based on the distributed consensus algorithm (for example, by combining infinite Paxos instances sequentially, for more information about this topic please refer to 《[Paxos Made Easy](https://github.com/turingcell/paxos-made-easy)》), to build a consensus, high-available and fault-tolerant distributed infinitely-long instruction tape. Several state machine executors with the same initial state execute the instructions on the tape sequentially. If each instruction on the tape is mathematically deterministic, then it is certain that when all state machine executors finish the execution of a same instruction at the same position on the tape, the internal state of all state machines must be the same. This model is called the "replicated state machines model". The essence of the replication state machine is to obtain a consensus, high-available and fault-tolerant distributed state machine through a consensus, high-available and fault-tolerant distributed infinitely-long instruction tape.
 
 Definition of the mathematical deterministic function 𝘮𝘥𝑓:
 
