@@ -16,8 +16,8 @@ Turing Cell Model是一个运行于分布式一致性算法(如Paxos/Raft)之上
 
 # Table of Content
 
-   * [0 摘要](#0-什么是TuringCell)
-   * [1 前言](#1-Turing-Cell模型的细节与证明)
+   * [0 什么是TuringCell](#0-什么是TuringCell)
+   * [1 Turing Cell模型的细节与证明](#1-Turing-Cell模型的细节与证明)
       * [1.1 复制状态机运行模型](#11-复制状态机运行模型)
       * [1.2 普通计算机运行模型](#12-普通计算机运行模型)
       * [1.3 TuringCell定理](#13-TuringCell定理)
