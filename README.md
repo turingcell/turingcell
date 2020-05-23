@@ -2,9 +2,9 @@
 
 ![TuringCell Logo](img/logo_small_icon.png)
 
-This article belongs to the open source project [turingcell](https://turingcell.org). This article focuses on the principle, a simple proof of Turing Cell computing model, and its corresponding implementation -- the core design of TuringCell computer.
+This article belongs to the open source project [TuringCell](https://turingcell.org). This article focuses on the principle, a simple proof of Turing Cell computing model, and its corresponding implementation -- the core design of TuringCell computer.
 
-Turing Cell Model is a computer model which runs over distributed consensus algorithm (like Paxos/Raft). TuringCell computer is an open source implementation of the Turing Cell Model. With TuringCell, you can easily add the characteristics of a Paxos/Raft group like high availability, high consensus, and fault tolerance to nearly any already existing software. At the meantime, TuringCell is a business friendly opensource project. Its core strength is from an open and inclusive opensource community. No matter where you come from and what language you speak, you can join in to develop and change the future of TuringCell equally and freely!
+Turing Cell Model is a computer model which runs over distributed consensus algorithm (like Paxos/Raft). TuringCell computer is an open source implementation of the Turing Cell Model. With TuringCell, you can easily add the characteristics of a Paxos/Raft group like high availability, consensus, and fault tolerance to nearly any already existing software. At the meantime, TuringCell is a business friendly opensource project. Its core strength is from an open and inclusive opensource community. No matter where you come from and what language you speak, you can join in to develop and change the future of TuringCell equally and freely!
 
 Author: Sen Han <00hnes@gmail.com>
 
