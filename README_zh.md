@@ -2,7 +2,7 @@
 
 # TuringCell：在Paxos/Raft算法之上运行Linux操作系统
 
-Note: The English version of this article will come out soon. Please wait with patience.
+Note: For the English version of this article please refer to this [link](https://github.com/turingcell/turingcell).
 
 ----
 
