@@ -105,6 +105,12 @@ state{cpu regsters' state, memory state, i/o devices' state}
 
 ## 2 TuringCell计算机的设计与实现
 
+![turingcell_computer_architecture](img/turingcell_computer_architecture.png)
+
+上图为TuringCell计算机的整体架构鸟瞰。
+
+事实上，RSM底层的分布式一致性算法实现有很多种方案，比如为了追求极致的性能可以选择定制专门的硬件来实现，甚至底层可以选择使用同步通讯链路来保证通讯性能，但是为了让我们的实现更加地通用和低成本，所以我们将选择使用由通用计算机所组成的分布式Paxos/Raft组作为我们RSM的底层一致性算法实现。
+
 ![TuringCell-Computer-Architecture-v0.1-and-v1.0](img/TuringCell-Computer-Architecture-v0.1-and-v1.0.png)
 
 TuringCell计算机v0.1为最小原型验证，v1.0版本为正式版本，可用于生产环境。
