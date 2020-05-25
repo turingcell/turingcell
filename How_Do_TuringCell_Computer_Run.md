@@ -25,7 +25,6 @@ computer_state = {
     memory_state, 
     io_devices_state = {
         registers_state,
-        persistent_storage,
         input_buffer_state,
         output_buffer_state,
     }
