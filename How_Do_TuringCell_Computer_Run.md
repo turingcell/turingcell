@@ -1,5 +1,7 @@
 # How Do TuringCell Computer Run?
 
+Status: Sloppy Draft
+
 ![turingcell_computer_architecture](img/turingcell_computer_architecture.png)
 
 In TuringCell computer, the Replicated State Machine (abbr. RSM) is implemented over the Paxos/Raft group which is consisted of a bunch of real-world Linux servers. And the computer runs over RSM is not the real hardware -- they are computer emulator which is common computer "hardware" equivalent. 
@@ -57,6 +59,6 @@ define mdf_computer_io_output(state_input, address, length)
 
 If all the instructions on the RSM tape are `mdf_computer_exec`/`mdf_computer_io_input`/`mdf_computer_io_output`, then the execution of the RSM should be equivalent to the running of the common computer.
 
-After the initial state being replicated between all replicas of the RSM, the only BIG data that needs to be `chosen` by the Paxos algorithm is the input data of the I/O. Except that, the running of all the replicas is just like the running of the normal computer emulator, thus the performance of the Linux running over TuringCell computer would be no big problems (we could use some optimizations methods like batching, emulator JIT and etc).
+After the initial state being replicated between all replicas of the RSM, the only BIG data that needs to be `chosen` by the Paxos algorithm is the input data of the I/O. Except that, the running of all the replicas is just like the running of the normal computer emulator, thus the performance of the Linux running over TuringCell computer would be no big problems (we could also use some optimizations methods like batching, emulator JIT and etc).
 
 
