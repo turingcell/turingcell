@@ -100,6 +100,12 @@ Then, we could get
 
 ## 2 The Design and Implementation of TuringCell Computer
 
+![turingcell_computer_architecture](img/turingcell_computer_architecture.png)
+
+The picture above is a diagram of the overall architecture of the TuringCell computer.
+
+In fact, there are many choices for the implementation of the distributed consensus algorithm underneath the RSM. For example, in order to pursue the ultimate performance, you can choose to customize special-purpose hardware to achieve that goal, or even choose to use synchronous communication link to ensure the performance of communication. But in order to let the implementation be more general and low-cost, we choose to use the distributed Paxos/Raft group composed of common computers as the underlying consensus algorithm implementation of RSM.
+
 ![TuringCell-Computer-Architecture-v0.1-and-v1.0](img/TuringCell-Computer-Architecture-v0.1-and-v1.0.png)
 
 TuringCell computer v0.1 is for the smallest prototype verification, and v1.0 version is the 1st stable version which could be used in the production environment.
